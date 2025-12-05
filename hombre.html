@@ -4,149 +4,179 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comisión Figura Hombre</title>
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f2f2f7;
-            padding: 20px;
-            text-align: center;
-        }
-        img {
-            width: 260px;
-            border-radius: 12px;
-        }
+        body { font-family: Arial; background: #f2f2f7; text-align: center; padding: 20px; }
+        img { width: 260px; border-radius: 15px; }
+
         .btn {
-            display: block;
-            margin: 20px auto;
-            padding: 12px 20px;
-            width: 200px;
-            border-radius: 10px;
+            padding: 12px;
             background: #0078ff;
             color: white;
-            font-size: 16px;
+            border-radius: 10px;
+            width: 220px;
+            border: none;
             cursor: pointer;
+            margin-top: 15px;
         }
-        .hidden { display: none; }
+
         .box {
             background: white;
             padding: 20px;
-            border-radius: 12px;
-            max-width: 350px;
+            border-radius: 15px;
+            width: 330px;
             margin: 20px auto;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
+
         input {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: 1px solid #aaa;
-        }
-        #adminPanel { margin-top: 60px; }
-        table {
             width: 95%;
-            margin: 10px auto;
-            border-collapse: collapse;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #aaa;
+            margin-bottom: 10px;
         }
-        table, th, td {
-            border: 1px solid #999;
+
+        .hidden { display: none; }
+
+        /* ADMIN */
+        #adminPanel { margin-top: 40px; }
+        #ordersList {
+            background:white;
+            padding:20px;
+            border-radius:12px;
+            margin-top:20px;
         }
-        th, td {
-            padding: 8px;
-            background: white;
+        .order {
+            padding:10px;
+            border-bottom:1px solid #ccc;
+            text-align:left;
         }
     </style>
 </head>
 <body>
 
-    <h1>Figura Hombre</h1>
+    <h1>Comisión Figura Hombre</h1>
     <img src="hombre.png">
 
-    <button class="btn" onclick="window.open('https://www.roblox.com/es/game-pass/1615243033/Comisi-n-hombre-50-OFF')">Comprar ahora</button>
-
-    <button class="btn" onclick="document.getElementById('tipBox').classList.remove('hidden')">¿Deseas dejar propina?</button>
+    <button class="btn" onclick="buy()">Comprar ahora</button>
 
     <div id="tipBox" class="box hidden">
-        <h3>Propina</h3>
-        <button class="btn" onclick="window.open('https://www.roblox.com/es/game-pass/1592675344/Tip')">Comprar propina</button>
+        <h2>¿Deseas comprar propina?</h2>
+        <button class="btn" onclick="buyTip()">Sí</button>
+        <button class="btn" onclick="showClaim()">No</button>
     </div>
 
-    <div class="box">
+    <div id="claimBox" class="box hidden">
         <h2>Claim your order</h2>
 
-        <input id="usuarioComprador" type="text" placeholder="Usuario que usaste para comprar">
-        <input id="usuarioComision" type="text" placeholder="¿Qué usuario quieres que haga tu comisión?">
-        <input id="correo" type="email" placeholder="Tu correo electrónico">
+        <input id="userPurchased" placeholder="Usuario con el que compraste">
+        <input id="userToDraw" placeholder="Usuario que quieres que haga tu comisión">
+        <input id="mail" placeholder="Tu email">
 
-        <button class="btn" onclick="guardarOrden()">Enviar</button>
-        <p id="msg"></p>
+        <button class="btn" onclick="sendClaim()">Enviar</button>
+
+        <br><br>
+        <a href="https://discord.gg/Bby3hWZUYV">
+            <button class="btn" style="background:#5865F2">Support</button>
+        </a>
     </div>
 
-    <!-- PANEL ADMIN -->
-    <div id="adminPanel">
-        <h2>🔒 Panel Admin</h2>
-        <input id="adminPass" type="password" placeholder="Contraseña: 1010">
+    <!-- ADMIN PANEL -->
+    <div id="adminPanel" class="box">
+        <h2>Admin Panel</h2>
+        <input id="adminPass" type="password" placeholder="Contraseña (1010)">
         <button class="btn" onclick="loginAdmin()">Entrar</button>
 
-        <div id="adminContent" class="hidden">
-            <h2>Órdenes recibidas</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Usuario comprador</th>
-                        <th>Usuario que hará la comisión</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-                <tbody id="ordersTable"></tbody>
-            </table>
-        </div>
+        <div id="ordersList" class="hidden"></div>
     </div>
 
 <script>
-function guardarOrden() {
-    let comprador = document.getElementById("usuarioComprador").value;
-    let comision = document.getElementById("usuarioComision").value;
-    let correo = document.getElementById("correo").value;
+/* ---------------- COMPRA ---------------- */
 
-    if (!comprador || !comision || !correo) {
-        document.getElementById("msg").innerText = "Completa todos los campos.";
+function buy() {
+    location.href = "https://www.roblox.com/es/game-pass/1615243033/Comisi-n-hombre-50-OFF";
+
+    setTimeout(() => {
+        document.getElementById("tipBox").classList.remove("hidden");
+    }, 1500);
+}
+
+function buyTip() {
+    location.href = "https://www.roblox.com/es/game-pass/1592675344/Tip";
+    setTimeout(showClaim, 1500);
+}
+
+/* ---------------- CLAIM YOUR ORDER ---------------- */
+
+function showClaim() {
+    document.getElementById("tipBox").classList.add("hidden");
+    document.getElementById("claimBox").classList.remove("hidden");
+}
+
+function sendClaim() {
+
+    let purchased = document.getElementById("userPurchased").value;
+    let draw = document.getElementById("userToDraw").value;
+    let mail = document.getElementById("mail").value;
+
+    if (!purchased || !draw || !mail) {
+        alert("Completa todos los campos.");
         return;
     }
 
-    let ordenes = JSON.parse(localStorage.getItem("ordenesHombre") || "[]");
+    let order = {
+        purchased,
+        draw,
+        mail,
+        date: new Date().toLocaleString()
+    };
 
-    ordenes.push({
-        comprador: comprador,
-        comision: comision,
-        correo: correo
+    let all = JSON.parse(localStorage.getItem("orders_hombre") || "[]");
+    all.push(order);
+    localStorage.setItem("orders_hombre", JSON.stringify(all));
+
+    /* ------ ENVIAR A DISCORD WEBHOOK ------ */
+
+    let webhook = "https://discord.com/api/webhooks/1446569276768129105/2axI5c4jfCx8GQGrqpQCnxneKvHslnN5qZZI7Dgxjn16-GE-VgAAdu45xA7wx7HCsnpc";
+
+    fetch(webhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            content: `@1446574262159671366\nNueva orden de comisión:\n\nUsuario comprador: **${purchased}**\nUsuario para comisión: **${draw}**\nMail: **${mail}**`
+        })
     });
 
-    localStorage.setItem("ordenesHombre", JSON.stringify(ordenes));
-
-    document.getElementById("msg").innerText = "¡Orden enviada correctamente!";
+    alert("¡Orden enviada!");
+    location.href = "index.html";
 }
+
+/* ---------------- ADMIN PANEL ---------------- */
 
 function loginAdmin() {
     let pass = document.getElementById("adminPass").value;
-    if (pass !== "1010") return alert("Contraseña incorrecta.");
 
-    document.getElementById("adminContent").classList.remove("hidden");
-    cargarOrdenes();
-}
+    if (pass !== "1010") {
+        alert("Contraseña incorrecta.");
+        return;
+    }
 
-function cargarOrdenes() {
-    let ordenes = JSON.parse(localStorage.getItem("ordenesHombre") || "[]");
-    let table = document.getElementById("ordersTable");
-    table.innerHTML = "";
+    let ordersDiv = document.getElementById("ordersList");
+    ordersDiv.classList.remove("hidden");
 
-    ordenes.forEach(o => {
-        table.innerHTML += `
-            <tr>
-                <td>${o.comprador}</td>
-                <td>${o.comision}</td>
-                <td>${o.correo}</td>
-            </tr>
+    let orders = JSON.parse(localStorage.getItem("orders_hombre") || "[]");
+
+    ordersDiv.innerHTML = "<h3>Órdenes recibidas:</h3>";
+
+    orders.forEach(o => {
+        ordersDiv.innerHTML += `
+            <div class="order">
+                <strong>Compró:</strong> ${o.purchased}<br>
+                <strong>Comisión para:</strong> ${o.draw}<br>
+                <strong>Mail:</strong> ${o.mail}<br>
+                <small>${o.date}</small>
+            </div>
         `;
     });
 }
