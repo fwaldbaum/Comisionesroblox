@@ -1,0 +1,61 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f7;
+    text-align: center;
+    padding: 20px;
+}
+
+img {
+    width: 260px;
+    border-radius: 12px;
+}
+
+.btn {
+    display: block;
+    margin: 12px auto;
+    padding: 12px;
+    width: 220px;
+    border-radius: 10px;
+    background: #0078ff;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-discord {
+    background: #5865F2 !important;
+}
+
+.box {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    width: 330px;
+    margin: 20px auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+input {
+    width: 95%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #aaa;
+}
+
+.hidden { display: none; }
+
+/* ADMIN */
+#ordersList {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.order {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
