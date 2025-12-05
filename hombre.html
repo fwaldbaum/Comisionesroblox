@@ -42,6 +42,19 @@
             border-radius: 8px;
             border: 1px solid #aaa;
         }
+        #adminPanel { margin-top: 60px; }
+        table {
+            width: 95%;
+            margin: 10px auto;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #999;
+        }
+        th, td {
+            padding: 8px;
+            background: white;
+        }
     </style>
 </head>
 <body>
@@ -60,10 +73,84 @@
 
     <div class="box">
         <h2>Claim your order</h2>
-        <input type="text" placeholder="Usuario que usaste para comprar">
-        <input type="text" placeholder="¿Qué usuario quieres que haga tu comisión?">
-        <button class="btn">Enviar</button>
+
+        <input id="usuarioComprador" type="text" placeholder="Usuario que usaste para comprar">
+        <input id="usuarioComision" type="text" placeholder="¿Qué usuario quieres que haga tu comisión?">
+        <input id="correo" type="email" placeholder="Tu correo electrónico">
+
+        <button class="btn" onclick="guardarOrden()">Enviar</button>
+        <p id="msg"></p>
     </div>
+
+    <!-- PANEL ADMIN -->
+    <div id="adminPanel">
+        <h2>🔒 Panel Admin</h2>
+        <input id="adminPass" type="password" placeholder="Contraseña: 1010">
+        <button class="btn" onclick="loginAdmin()">Entrar</button>
+
+        <div id="adminContent" class="hidden">
+            <h2>Órdenes recibidas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Usuario comprador</th>
+                        <th>Usuario que hará la comisión</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+<script>
+function guardarOrden() {
+    let comprador = document.getElementById("usuarioComprador").value;
+    let comision = document.getElementById("usuarioComision").value;
+    let correo = document.getElementById("correo").value;
+
+    if (!comprador || !comision || !correo) {
+        document.getElementById("msg").innerText = "Completa todos los campos.";
+        return;
+    }
+
+    let ordenes = JSON.parse(localStorage.getItem("ordenesHombre") || "[]");
+
+    ordenes.push({
+        comprador: comprador,
+        comision: comision,
+        correo: correo
+    });
+
+    localStorage.setItem("ordenesHombre", JSON.stringify(ordenes));
+
+    document.getElementById("msg").innerText = "¡Orden enviada correctamente!";
+}
+
+function loginAdmin() {
+    let pass = document.getElementById("adminPass").value;
+    if (pass !== "1010") return alert("Contraseña incorrecta.");
+
+    document.getElementById("adminContent").classList.remove("hidden");
+    cargarOrdenes();
+}
+
+function cargarOrdenes() {
+    let ordenes = JSON.parse(localStorage.getItem("ordenesHombre") || "[]");
+    let table = document.getElementById("ordersTable");
+    table.innerHTML = "";
+
+    ordenes.forEach(o => {
+        table.innerHTML += `
+            <tr>
+                <td>${o.comprador}</td>
+                <td>${o.comision}</td>
+                <td>${o.correo}</td>
+            </tr>
+        `;
+    });
+}
+</script>
 
 </body>
 </html>
